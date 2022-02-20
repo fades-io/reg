@@ -11,7 +11,7 @@ type postgresDB struct {
 	db *gorm.DB
 }
 
-// Конструктор БД
+// New Конструктор БД
 func New(db *gorm.DB) server.Storage {
 	return &postgresDB{
 		db: db,
@@ -19,15 +19,13 @@ func New(db *gorm.DB) server.Storage {
 }
 
 // RegUser Регистрация нового пользователя
-// TODO: implement
-func (postgres *postgresDB) RegUser(username, email, password string) (*domain.User, error) {
-	user := domain.User{}
+func (postgres *postgresDB) RegUser(username, email, password string) error {
 
-	err := postgres.db.Debug().Create(&User{Username: username, Email: email, Password: password})
+	err := postgres.db.Debug().Create(&domain.UserToDB{Username: username, Email: email, Password: password})
 
 	if err != nil {
-		return nil, err
+		return nil
 	}
 
-	return &user, nil
+	return nil
 }

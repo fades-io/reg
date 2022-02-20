@@ -5,8 +5,7 @@ import (
 	"log"
 	"os"
 
-	// TODO: присвоить
-	"github.com/fades-io/reg/internal/database/postgresql"
+	"github.com/fades-io/reg/internal/db/postgresql"
 	"github.com/fades-io/reg/internal/server"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,7 +13,7 @@ import (
 
 var srv = server.Server{}
 
-// Конфиг БД
+// DbConfig Конфиг БД
 type DbConfig struct {
 	driver   string
 	host     string
@@ -24,7 +23,7 @@ type DbConfig struct {
 	password string
 }
 
-// Создание и запуск сервера
+// Run Создание и запуск сервера
 func Run() {
 	dbConfig := GetDbConfig()
 	storage := GetDB(dbConfig)
