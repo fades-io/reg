@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	userLoginURL = "/reg"
+	userRegURL = "/reg"
 )
 
 func (server *Server) initRouters() {
-	server.Router.HandlerFunc(http.MethodPost, userLoginURL, middlewares.SetHeadersMiddleware(server.Reg))
+	server.Router.HandlerFunc(http.MethodPost, userRegURL, middlewares.SetHeadersMiddleware(server.Reg))
 }
