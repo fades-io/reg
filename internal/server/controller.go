@@ -10,7 +10,6 @@ import (
 )
 
 // Регистрация нового пользователя
-// TODO: implement
 func (server *Server) Reg(w http.ResponseWriter, r *http.Request) error {
 	// Получаем тело запроса
 	body, err := ioutil.ReadAll(r.Body)
@@ -30,8 +29,7 @@ func (server *Server) Reg(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return apperror.New(err, "Неверный формат данных. Проверьте, корректно ли введен логин/пароль", err.Error(), http.StatusBadRequest)
 	}
-	// Вместо
-	// token, apperror := server.SignIn(user.Username, user.Password)
+
 	err = server.service.RegUser(user.Username, user.Email, user.Password)
 	if err != nil {
 		return apperror.New(err, "Неверный формат данных. Проверьте, корректно ли введен логин/пароль", err.Error(), http.StatusBadRequest)
