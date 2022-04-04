@@ -21,10 +21,10 @@ func New(db *gorm.DB) server.Storage {
 // RegUser Регистрация нового пользователя
 func (postgres *postgresDB) RegUser(username, email, password string) error {
 
-	err := postgres.db.Debug().Create(&domain.UserToDB{Username: username, Email: email, Password: password})
+	err := postgres.db.Debug().Create(&domain.UserToDB{Username: username, Email: email, Password: password}).Error
 
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil
