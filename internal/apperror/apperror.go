@@ -6,11 +6,11 @@ var (
 	ErrNotFound = New(nil, "Not found", "", 404)
 )
 
-// Кастомная ошибка, которая передается в json вместе с сообщением
+// AppError Кастомная ошибка, которая передается в json вместе с сообщением
 type AppError struct {
 	Err              error  `json:"-"` // исходная ошибка, поэтому в JSON она нам не нужна
 	Message          string `json:"message,omitempty"`
-	DeveloperMEssage string `json:"developer_message,omitempty"`
+	DeveloperMessage string `json:"developer_message,omitempty"`
 	Code             uint32 `json:"code,omitempty"`
 }
 
@@ -31,17 +31,17 @@ func (appError *AppError) Marshal() []byte {
 	return marshal
 }
 
-// Создает кастомную ошибку
+// New Кастомная ошибка
 func New(err error, message, developerMessage string, code uint32) *AppError {
 	return &AppError{
 		Err:              err,
 		Message:          message,
-		DeveloperMEssage: developerMessage,
+		DeveloperMessage: developerMessage,
 		Code:             code,
 	}
 }
 
-// Любую ошибку оборачиваем в системную
+// SystemError Системная ошибка
 func SystemError(err error) *AppError {
 	return New(err, "Внутренняя ошибка сервера", err.Error(), 418)
 }
