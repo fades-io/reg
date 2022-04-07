@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"github.com/fades-io/reg/internal/logs"
 	"log"
 	"os"
 
@@ -31,7 +32,7 @@ func Run() {
 	srv.Run()
 }
 
-// Получение конфигурации для БД
+// GetDbConfig Получение конфигурации для БД
 func GetDbConfig() *DbConfig {
 	return &DbConfig{
 		driver:   os.Getenv("DB_DRIVER"),
@@ -43,18 +44,18 @@ func GetDbConfig() *DbConfig {
 	}
 }
 
-// Получение БД
+// GetDB Получение БД
 func GetDB(dbConfig *DbConfig) server.Storage {
 	if dbConfig.driver == "postgres" {
 		dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", dbConfig.host, dbConfig.port, dbConfig.name, dbConfig.user, dbConfig.password)
 		gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
-			fmt.Printf("Не могу подсоединиться к базе данных, используя драйвер %s", dbConfig.driver)
-			log.Fatal("Ошибка:", err)
+			fmt.Printf(logs.DatabaseAccessDenied, dbConfig.driver)
+			log.Fatal(logs.Error, err)
 		} else {
-			fmt.Printf("База данных %s подключена\n", dbConfig.driver)
+			fmt.Printf(logs.DatabaseConnection, dbConfig.driver)
 		}
-		return postgresql.New(gormDB)
+		return postgresql.NewDb(gormDB)
 	}
 	return nil
 }

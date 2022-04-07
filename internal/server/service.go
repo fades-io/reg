@@ -1,6 +1,6 @@
 package server
 
-// Тип для работы с БД
+// Тип service для работы с БД
 type service struct {
 	storage Storage
 }
@@ -17,7 +17,7 @@ func NewService(storage Storage) Service {
 	}
 }
 
-// RegUser Регистрация нового пользователя
+// RegUser функция регистрации нового пользователя
 func (s *service) RegUser(username, email, password string) error {
 	return s.storage.RegUser(username, email, password)
 }

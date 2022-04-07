@@ -1,38 +1,27 @@
 package apperror
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/fades-io/reg/internal/logs"
+)
+
+//Готовые переменные для стандратных ошибок
 
 var (
-	ErrNotFound = New(nil, "Not found", "", 404)
+	ErrNotFound = NewAppError(nil, logs.NotFound, "", 404)
 )
 
 // AppError Кастомная ошибка, которая передается в json вместе с сообщением
+// Специальная тип для ошибок в приложении
 type AppError struct {
-	Err              error  `json:"-"` // исходная ошибка, поэтому в JSON она нам не нужна
+	Err              error  `json:"-"`
 	Message          string `json:"message,omitempty"`
 	DeveloperMessage string `json:"developer_message,omitempty"`
 	Code             uint32 `json:"code,omitempty"`
 }
 
-// метод для соответствия интерфейсу Error{}
-func (appError *AppError) Error() string {
-	return appError.Message
-}
-
-func (appError *AppError) Unwrap() error {
-	return appError.Err
-}
-
-func (appError *AppError) Marshal() []byte {
-	marshal, err := json.Marshal(appError)
-	if err != nil {
-		return nil
-	}
-	return marshal
-}
-
-// New Кастомная ошибка
-func New(err error, message, developerMessage string, code uint32) *AppError {
+// NewAppError Функция создания новой ошибки
+func NewAppError(err error, message, developerMessage string, code uint32) *AppError {
 	return &AppError{
 		Err:              err,
 		Message:          message,
@@ -41,7 +30,26 @@ func New(err error, message, developerMessage string, code uint32) *AppError {
 	}
 }
 
+// Error метод для соответствия стандартному интерфейсу Error{}
+func (appError *AppError) Error() string {
+	return appError.Message
+}
+
+// Unwrap Возвращает корневую ошибку
+func (appError *AppError) Unwrap() error {
+	return appError.Err
+}
+
+// Marshal Вспомогательный метод для сериализации ошибки
+func (appError *AppError) Marshal() []byte {
+	marshal, err := json.Marshal(appError)
+	if err != nil {
+		return nil
+	}
+	return marshal
+}
+
 // SystemError Системная ошибка
 func SystemError(err error) *AppError {
-	return New(err, "Внутренняя ошибка сервера", err.Error(), 418)
+	return NewAppError(err, logs.InternalServerError, err.Error(), 418)
 }

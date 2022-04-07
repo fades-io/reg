@@ -2,6 +2,8 @@ package domain
 
 import (
 	"errors"
+	"github.com/fades-io/reg/internal/apperror"
+	"github.com/fades-io/reg/internal/logs"
 	"html"
 	"regexp"
 	"strings"
@@ -35,13 +37,13 @@ func (user *UserStruct) Validate(action string) error {
 	switch strings.ToLower(action) {
 	case "reg":
 		if user.Username == "" {
-			return errors.New("Требуется логин")
+			return apperror.NewAppError(errors.New(strings.ToLower(logs.LoginRequired)), logs.LoginRequired, logs.LoginRequired, 422)
 		}
 		if user.Email == "" {
-			return errors.New("Требуется почта")
+			return apperror.NewAppError(errors.New(strings.ToLower(logs.EmailRequired)), logs.EmailRequired, logs.EmailRequired, 422)
 		}
 		if user.Password == "" {
-			return errors.New("Требуется пароль")
+			return apperror.NewAppError(errors.New(strings.ToLower(logs.PasswordRequired)), logs.PasswordRequired, logs.PasswordRequired, 422)
 		}
 		return nil
 	default:

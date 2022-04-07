@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/fades-io/reg/internal/logs"
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
@@ -20,9 +21,9 @@ func (server *Server) Init(storage Storage) {
 	server.initRouters()
 }
 
-// Запускаем сервер, слушаем порт
+// Run Запускаем сервер, слушаем порт
 func (server *Server) Run() {
-	fmt.Println("Запуск сервера на хосте")
+	fmt.Println(logs.LaunchServer)
 	host := os.Getenv("APP_HOST")
 	port := os.Getenv("APP_PORT")
 	log.Fatal(http.ListenAndServe(host+":"+port, server.Router))
