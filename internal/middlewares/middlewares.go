@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"github.com/fades-io/reg/internal/logs"
 	"log"
 	"net/http"
 
@@ -17,7 +16,7 @@ func Middleware(h AppHandler) http.HandlerFunc {
 
 		err := apperror.HandleError(w, r, h)
 		if err != nil {
-			log.Printf(logs.FailedHandleError, err)
+			log.Printf(apperror.FailedHandleError, err)
 		}
 	}
 }

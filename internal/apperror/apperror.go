@@ -2,13 +2,12 @@ package apperror
 
 import (
 	"encoding/json"
-	"github.com/fades-io/reg/internal/logs"
 )
 
 //Готовые переменные для стандратных ошибок
 
 var (
-	ErrNotFound = NewAppError(nil, logs.NotFound, "", 404)
+	ErrNotFound = NewAppError(nil, NotFound, "", 404)
 )
 
 // AppError Кастомная ошибка, которая передается в json вместе с сообщением
@@ -51,5 +50,5 @@ func (appError *AppError) Marshal() []byte {
 
 // SystemError Системная ошибка
 func SystemError(err error) *AppError {
-	return NewAppError(err, logs.InternalServerError, err.Error(), 418)
+	return NewAppError(err, InternalServerError, err.Error(), 418)
 }

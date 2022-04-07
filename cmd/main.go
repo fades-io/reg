@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/fades-io/reg/internal/logs"
+	"github.com/fades-io/reg/internal/apperror"
+	"github.com/fades-io/reg/internal/logging"
 	"log"
 	"os"
 	"os/signal"
@@ -22,7 +23,7 @@ func signallHandler(q chan bool) {
 
 	// Для каждого полученного сигнала
 	for signal := range c {
-		log.Printf(logs.SignalReceived, signal.String())
+		log.Printf(logging.SignalReceived, signal.String())
 
 		switch signal {
 		case syscall.SIGINT, syscall.SIGTERM:
@@ -35,7 +36,7 @@ func signallHandler(q chan bool) {
 			quit = false
 			//              closeDb()
 			//              closeLog()
-			log.Print(logs.Terminating)
+			log.Print(logging.Terminating)
 			os.Exit(0)
 		}
 		// Оповещаяем о прекращении работы
@@ -47,9 +48,9 @@ func main() {
 	var err error
 	err = godotenv.Load()
 	if err != nil {
-		log.Fatalf(logs.FileAccessFailed, err)
+		log.Fatalf(apperror.FileAccessFailed, err)
 	} else {
-		fmt.Println(logs.FileAccessSuccess)
+		fmt.Println(logging.FileAccessSuccess)
 	}
 
 	// Канал для сигналов

@@ -2,7 +2,8 @@ package internal
 
 import (
 	"fmt"
-	"github.com/fades-io/reg/internal/logs"
+	"github.com/fades-io/reg/internal/apperror"
+	"github.com/fades-io/reg/internal/logging"
 	"log"
 	"os"
 
@@ -50,10 +51,10 @@ func GetDB(dbConfig *DbConfig) server.Storage {
 		dsn := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", dbConfig.host, dbConfig.port, dbConfig.name, dbConfig.user, dbConfig.password)
 		gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
-			fmt.Printf(logs.DatabaseAccessDenied, dbConfig.driver)
-			log.Fatal(logs.Error, err)
+			fmt.Printf(apperror.DatabaseAccessDenied, dbConfig.driver)
+			log.Fatal(apperror.Error, err)
 		} else {
-			fmt.Printf(logs.DatabaseConnection, dbConfig.driver)
+			fmt.Printf(logging.DatabaseConnection, dbConfig.driver)
 		}
 		return postgresql.NewDb(gormDB)
 	}
